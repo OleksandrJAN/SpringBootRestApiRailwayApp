@@ -1,6 +1,9 @@
 package com.railwayApp.api.security;
 
-import io.jsonwebtoken.*;
+import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.JwtException;
+import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.SignatureAlgorithm;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
@@ -31,40 +34,29 @@ public class JwtService {
                 .getBody();
     }
 
-    private Claims generateClaims(UserDetails userDetails) {
-        Date now = new Date();
-        Date expiration = new Date(now.getTime() + validityInMilliseconds);
-
-        Claims claims = Jwts.claims()
-                .setSubject(userDetails.getUsername())
-                .setIssuedAt(now)
-                .setExpiration(expiration);
-        claims.put("roles", userDetails.getAuthorities());
-        return claims;
-    }
-
-    private String generateToken(Claims claims) {
-        return Jwts.builder()
-                .setClaims(claims)
-                .signWith(SignatureAlgorithm.HS256, secret)
-                .compact();
-    }
-
     public String extractUsername(String token) {
         Claims claims = extractClaims(token);
         return claims.getSubject();
     }
 
     public String createToken(UserDetails userDetails) {
-        Claims claims = generateClaims(userDetails);
-        return generateToken(claims);
+        Date now = new Date();
+        Date expiration = new Date(now.getTime() + validityInMilliseconds);
+
+        return Jwts.builder()
+                .setSubject(userDetails.getUsername())
+                .setIssuedAt(now)
+                .setExpiration(expiration)
+                .claim("roles", userDetails.getAuthorities())
+                .signWith(SignatureAlgorithm.HS256, secret)
+                .compact();
     }
 
     public boolean validateToken(String token) {
         try {
             Jwts.parser().setSigningKey(secret).parseClaimsJws(token);
             return true;
-        } catch (ExpiredJwtException | UnsupportedJwtException | MalformedJwtException | SignatureException | IllegalArgumentException e) {
+        } catch (JwtException | IllegalArgumentException e) {
             System.out.println(e.getMessage());
             return false;
         }
