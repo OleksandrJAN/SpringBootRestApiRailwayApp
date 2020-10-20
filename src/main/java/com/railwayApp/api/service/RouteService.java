@@ -7,8 +7,10 @@ import com.railwayApp.api.repo.RouteRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Comparator;
 import java.util.List;
 import java.util.Set;
+import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 @Service
@@ -23,19 +25,25 @@ public class RouteService {
 
 
     public List<RouteDto> getRoutes(Station from, Station to) {
+        // get all routes that pass through the stations
         Set<Route> fromRoutes = from.getRoutes();
         Set<Route> toRoutes = to.getRoutes();
+
+        // find the intersection of routes
         fromRoutes.retainAll(toRoutes);
 
-        return fromRoutes.stream()
-                .map(RouteDto::new)
-                .collect(Collectors.toList());
-    }
+        // determine a direction of route
+        Predicate<Route> directionFilter = route -> {
+            List<Station> stations = route.getStations();
+            int fromId = stations.indexOf(from);
+            int toId = stations.indexOf(to);
+            return fromId < toId;
+        };
 
-    public List<RouteDto> getRoutes() {
-        return routeRepo.findAll()
-                .stream()
-                .map(RouteDto::new)
+        return fromRoutes.stream()
+                .filter(directionFilter)
+                .map(route -> new RouteDto(route, from, to))
+                .sorted(Comparator.comparingInt(RouteDto::getDepartureTime))
                 .collect(Collectors.toList());
     }
 
