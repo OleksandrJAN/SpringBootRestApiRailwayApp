@@ -17,13 +17,13 @@ public class Schedule {
     private Long id;
 
     @Column(name = "arrival_time")
-    private int arrivalTime;
+    private Integer arrivalTime;
 
     @Column(name = "departure_time")
-    private int departureTime;
+    private Integer departureTime;
 
     @Column(name = "downtime")
-    private int downtime;
+    private Integer downtime;
 
     @OneToMany(mappedBy = "schedule")
     @JsonBackReference
