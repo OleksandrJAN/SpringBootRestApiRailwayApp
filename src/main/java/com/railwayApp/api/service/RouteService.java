@@ -3,6 +3,7 @@ package com.railwayApp.api.service;
 import com.railwayApp.api.domain.Route;
 import com.railwayApp.api.domain.Station;
 import com.railwayApp.api.dto.RouteDto;
+import com.railwayApp.api.dto.RouteSchedule;
 import com.railwayApp.api.repo.RouteRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -47,11 +48,11 @@ public class RouteService {
                 .collect(Collectors.toList());
     }
 
-    public RouteDto getRoute(Long id) {
+    public RouteSchedule getRouteInfo(Long id) {
         Route route = routeRepo
                 .findById(id)
                 .orElseThrow(() -> new RuntimeException("route with id = '" + id + "' not found"));
-        return new RouteDto(route);
+        return new RouteSchedule(route);
     }
 
 }
