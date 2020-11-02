@@ -25,8 +25,8 @@ public class RouteController {
 
     @GetMapping("/routes")
     public ResponseEntity<List<RouteDto>> getRoutes(
-            @RequestParam(name = "from", required = false) Station departureStation,
-            @RequestParam(name = "to", required = false) Station arrivalStation
+            @RequestParam(name = "from") Station departureStation,
+            @RequestParam(name = "to") Station arrivalStation
     ) {
         List<RouteDto> routes = routeService.getRoutes(departureStation, arrivalStation);
         return new ResponseEntity<>(routes, HttpStatus.OK);

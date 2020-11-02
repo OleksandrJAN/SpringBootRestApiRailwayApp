@@ -7,6 +7,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class StationService {
@@ -20,5 +21,12 @@ public class StationService {
 
     public List<Station> getStations() {
         return stationRepo.findAll(Sort.by(Sort.Direction.ASC, "name"));
+    }
+
+    public Station getStationByName(String name) {
+        Station station = stationRepo
+                .findByName(name)
+                .orElseThrow(() -> new RuntimeException("Station with name '" + name + "' not found"));
+        return station;
     }
 }
