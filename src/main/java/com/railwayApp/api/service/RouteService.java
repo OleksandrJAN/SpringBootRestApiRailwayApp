@@ -51,7 +51,7 @@ public class RouteService {
     public RouteSchedule getRouteInfo(Long id) {
         Route route = routeRepo
                 .findById(id)
-                .orElseThrow(() -> new RuntimeException("route with id = '" + id + "' not found"));
+                .orElseThrow(() -> new RuntimeException("route with id '" + id + "' not found"));
         return new RouteSchedule(route);
     }
 
