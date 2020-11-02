@@ -21,8 +21,8 @@ public class StationController {
     }
 
     @GetMapping("/stations")
-    public ResponseEntity<List<Station>> getStations() {
-        List<Station> stations = stationService.getStations();
-        return new ResponseEntity<>(stations, HttpStatus.OK);
+    public ResponseEntity<List<String>> getStationsNames() {
+        List<String> stationsNames = stationService.getStationsNames();
+        return new ResponseEntity<>(stationsNames, HttpStatus.OK);
     }
 }

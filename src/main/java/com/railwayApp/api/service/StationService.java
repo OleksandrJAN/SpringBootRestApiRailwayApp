@@ -19,8 +19,12 @@ public class StationService {
         this.stationRepo = stationRepo;
     }
 
-    public List<Station> getStations() {
-        return stationRepo.findAll(Sort.by(Sort.Direction.ASC, "name"));
+    public List<String> getStationsNames() {
+        return stationRepo.findAll()
+                .stream()
+                .map(Station::getName)
+                .sorted()
+                .collect(Collectors.toList());
     }
 
     public Station getStationByName(String name) {
