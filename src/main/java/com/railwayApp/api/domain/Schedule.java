@@ -22,9 +22,6 @@ public class Schedule {
     @Column(name = "departure_time")
     private Integer departureTime;
 
-    @Column(name = "downtime")
-    private Integer downtime;
-
     @OneToMany(mappedBy = "schedule")
     @JsonBackReference
     private List<RouteStationSchedule> routesStationTrains;
