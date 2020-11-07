@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.web.bind.annotation.*;
@@ -35,7 +36,9 @@ public class AuthenticationController {
     public ResponseEntity<LoginResponse> login(@RequestBody LoginRequest loginRequest) {
         String username = loginRequest.getUsername();
         String password = loginRequest.getPassword();
-        authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(username, password));
+
+        Authentication authentication = new UsernamePasswordAuthenticationToken(username, password);
+        authenticationManager.authenticate(authentication);
 
         UserDetails userDetails = userDetailsService.loadUserByUsername(username);
         String token = jwtService.createToken(userDetails);

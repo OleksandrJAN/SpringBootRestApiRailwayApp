@@ -15,8 +15,8 @@ public class StationConverter implements Converter<String, Station> {
     }
 
     @Override
-    public Station convert(String s) {
-        Station station = stationService.getStationByName(s);
+    public Station convert(String stationName) {
+        Station station = stationService.getStation(stationName);
         return station;
     }
 }

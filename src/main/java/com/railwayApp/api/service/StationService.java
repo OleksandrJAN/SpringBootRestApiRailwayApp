@@ -27,7 +27,7 @@ public class StationService {
                 .collect(Collectors.toList());
     }
 
-    public Station getStationByName(String name) {
+    public Station getStation(String name) {
         Station station = stationRepo
                 .findByName(name)
                 .orElseThrow(() -> new RuntimeException("Station with name '" + name + "' not found"));
